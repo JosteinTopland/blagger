@@ -1,2 +1,3 @@
-blagger
-*.o
+Debug
+blagger.vcxproj.user
+.vs
