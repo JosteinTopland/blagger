@@ -13,6 +13,7 @@ static SDL_Window *window;
 static SDL_Renderer *renderer;
 static SDL_Texture *sprites;
 static Mix_Chunk *sounds[2];
+static Mix_Music *music;
 
 void init()
 {
@@ -20,7 +21,7 @@ void init()
     int height = windowHeight * windowScale;
     SDL_Init(SDL_INIT_EVERYTHING);
     SDL_CreateWindowAndRenderer(width, height, SDL_WINDOW_OPENGL, &window, &renderer);
-    SDL_RenderSetScale(renderer, windowScale, windowScale);
+    SDL_RenderSetScale(renderer, (float)windowScale, (float)windowScale);
 
     Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 1, 1024);
     Mix_Volume(-1, 50);
@@ -34,6 +35,10 @@ void init()
     // load sounds
     sounds[SND_WALK] = Mix_LoadWAV("assets/walk.wav");
     sounds[SND_JUMP] = Mix_LoadWAV("assets/jump.wav");
+
+    music = Mix_LoadMUS("assets/CROWN.MOD");
+    Mix_VolumeMusic(15);
+    //Mix_PlayMusic(music, -1);
 }
 
 void quit()
@@ -47,9 +52,9 @@ void quit()
     SDL_Quit();
 }
 
-int main() {
+int main(int argc, char *argv[]) {
     init();
-    retroLoader(renderer, sprites);
+    //retroLoader(renderer, sprites);
     setLevel(0);
 
     int run = 1;
@@ -65,4 +70,5 @@ int main() {
     }
 
     quit();
+    return 0;
 }

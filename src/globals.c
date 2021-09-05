@@ -9,6 +9,7 @@ const int levelHeight = 19;
 const int grid = 16;
 
 const SpriteCoord sprite_coords[] = {
+    // x, y, w, h, frames, msec per frames
     { 0, 142, 16, 16, 1, 1 }, // 0x01 brick
     { 48, 142, 16, 16, 1, 1 }, // 0x02 key
     { 96, 142, 16, 16, 1, 1 }, // 0x03 flower    

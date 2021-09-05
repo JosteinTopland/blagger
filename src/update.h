@@ -5,6 +5,6 @@
 #include "types.h"
 
 void update();
-SDL_bool collision(const struct Sprite *p);
+SDL_bool collision(const struct Sprite *sprite, int x, int y);
 
 #endif

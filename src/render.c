@@ -1,3 +1,6 @@
+#include <string.h>
+#include <stdlib.h>
+
 #include "render.h"
 #include "globals.h"
 
@@ -33,10 +36,9 @@ void render(SDL_Renderer *renderer, SDL_Texture *sprites)
     SDL_Rect dst = {x - 1, y - sc.height, sc.width, sc.height};
     SDL_RendererFlip flip = (player.state & RIGHT) ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
     SDL_RenderCopyEx(renderer, sprites, &src, &dst, 0, 0, flip);
-    if (0) {
-        SDL_SetRenderDrawColor(renderer, 255, 0, 255, 255);
-        SDL_RenderDrawRect(renderer, &dst);
-    }
+    // debug
+    SDL_SetRenderDrawColor(renderer, 255, 0, 255, 255);
+    SDL_RenderDrawRect(renderer, &dst);
 
     drawText(renderer, sprites, "THE BANK", 12, 19);
 
@@ -44,7 +46,7 @@ void render(SDL_Renderer *renderer, SDL_Texture *sprites)
 }
 
 void drawText(SDL_Renderer *renderer, SDL_Texture *sprites, const char * text, int x, int y) {
-    for (int i = 0; i < strlen(text); i++) {
+    for (unsigned i = 0; i < strlen(text); i++) {
         if (text[i] == ' ') continue;
         int xx = (x + i) * grid;
         int yy = y * grid;
@@ -79,13 +81,13 @@ void retroLoader(SDL_Renderer *renderer, SDL_Texture *sprites)
     int colorIdx = SDL_GetTicks() % numColors;
     SDL_Texture *texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_BGRA32, SDL_TEXTUREACCESS_STREAMING, windowWidth, windowHeight);
     Uint32 *pixels = malloc(windowWidth * windowHeight * sizeof(Uint32));
-    for (int frames = 0; frames < 50; frames++) {
-        if (frames < 30) {
+    for (int frames = 0; frames < 100; frames++) {
+        if (frames < 80) {
             int length = 0;
             for (int i = 0; i < windowWidth * windowHeight; i++) {
                 if (length == 0) {
                     colorIdx = (colorIdx + 1) % numColors;
-                    length = 5000 + rand() % 10000;
+                    length = 5000 + rand() % (frames < 50 ? 10000 : 50000);
                 }
                 length--;
                 pixels[i] = colors[colorIdx];
