@@ -1,3 +1,5 @@
 Debug
 blagger.vcxproj.user
 .vs
+*.o
+blagger

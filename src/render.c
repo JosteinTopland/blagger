@@ -108,6 +108,10 @@ void retroLoader(SDL_Renderer *renderer, SDL_Texture *sprites)
         SDL_RenderFillRect(renderer, &rect);
         drawText(renderer, sprites, "LOADING", 3, 4);
 
+        // OSX fix
+        SDL_Event event;
+        SDL_PollEvent(&event);
+
         SDL_RenderPresent(renderer);
         SDL_Delay(30);
     }

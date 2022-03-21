@@ -86,20 +86,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\blagger.c" />
-    <ClCompile Include="src\globals.c" />
-    <ClCompile Include="src\input.c" />
-    <ClCompile Include="src\level.c" />
-    <ClCompile Include="src\render.c" />
-    <ClCompile Include="src\update.c" />
+    <ClCompile Include="..\src\blagger.c" />
+    <ClCompile Include="..\src\globals.c" />
+    <ClCompile Include="..\src\input.c" />
+    <ClCompile Include="..\src\level.c" />
+    <ClCompile Include="..\src\render.c" />
+    <ClCompile Include="..\src\update.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\globals.h" />
-    <ClInclude Include="src\input.h" />
-    <ClInclude Include="src\level.h" />
-    <ClInclude Include="src\render.h" />
-    <ClInclude Include="src\types.h" />
-    <ClInclude Include="src\update.h" />
+    <ClInclude Include="..\src\globals.h" />
+    <ClInclude Include="..\src\input.h" />
+    <ClInclude Include="..\src\level.h" />
+    <ClInclude Include="..\src\render.h" />
+    <ClInclude Include="..\src\types.h" />
+    <ClInclude Include="..\src\update.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

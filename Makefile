@@ -1,29 +1,20 @@
-CC=gcc
-CFLAGS=`sdl2-config --cflags` -Wall
-LDFLAGS=`sdl2-config --libs` -lSDL2_mixer
+SRCDIR  = src/
+SRCS    = $(wildcard $(SRCDIR)*.c)
+OBJS    = $(notdir $(SRCS:.c=.o))
+OUT     = blagger
 
-all: blagger
+CC      = gcc
+CFLAGS  = $(shell sdl2-config --cflags) -Wall -std=c99 -g -pedantic
+LDFLAGS = $(shell sdl2-config --libs) -lSDL2_image -lSDL2_mixer
 
-blagger: blagger.o render.o input.o update.o globals.o level.o
-	$(CC) $(LDFLAGS) -o blagger blagger.o render.o input.o update.o globals.o level.o
+#link
+$(OUT): $(OBJS)
+	$(CC) $(LDFLAGS) -o $@ $^
 
-blagger.o: blagger.c render.h types.h input.h globals.h
-	$(CC) $(CFLAGS) -c blagger.c
+#compile
+%.o: $(SRCDIR)%.c
+	$(CC) $(CFLAGS) -c -o $@ $<
 
-render.o: render.c render.h types.h
-	$(CC) $(CFLAGS) -c render.c
-
-input.o: input.c input.h types.h
-	$(CC) $(CFLAGS) -c input.c
-
-update.o: update.c update.h types.h globals.h
-	$(CC) $(CFLAGS) -c update.c
-
-globals.o: globals.c globals.h types.h
-	$(CC) $(CFLAGS) -c globals.c
-
-level.o: level.c level.h types.h
-	$(CC) $(CFLAGS) -c level.c
-
+.PHONY: clean
 clean:
-	rm -f blagger *.o
+	rm -f $(OBJS) $(OUT)

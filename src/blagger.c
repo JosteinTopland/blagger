@@ -38,7 +38,7 @@ void init()
 
     music = Mix_LoadMUS("assets/CROWN.MOD");
     Mix_VolumeMusic(15);
-    //Mix_PlayMusic(music, -1);
+    Mix_PlayMusic(music, -1);
 }
 
 void quit()
@@ -54,7 +54,7 @@ void quit()
 
 int main(int argc, char *argv[]) {
     init();
-    //retroLoader(renderer, sprites);
+    retroLoader(renderer, sprites);
     setLevel(0);
 
     int run = 1;
@@ -65,8 +65,10 @@ int main(int argc, char *argv[]) {
         update();
         render(renderer, sprites);
 
+        // wait
         int fps = 30;
-        SDL_Delay(ticks + 1000 / fps - SDL_GetTicks());
+        int delay = 1000 / fps - (SDL_GetTicks() - ticks);
+        if (delay > 0) SDL_Delay(delay);
     }
 
     quit();
