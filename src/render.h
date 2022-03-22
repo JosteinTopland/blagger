@@ -1,7 +1,7 @@
 #ifndef RENDER_H
 #define RENDER_H
 
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #include "types.h"
 
 void render(SDL_Renderer *renderer, SDL_Texture *sprites);
