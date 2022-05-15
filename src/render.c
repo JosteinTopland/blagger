@@ -4,6 +4,8 @@
 #include "render.h"
 #include "globals.h"
 
+#define DEBUG
+
 void render(SDL_Renderer *renderer, SDL_Texture *sprites)
 {
     int ticks = SDL_GetTicks();
@@ -25,6 +27,11 @@ void render(SDL_Renderer *renderer, SDL_Texture *sprites)
         SDL_Rect src = {sc.x, sc.y, sc.width, sc.height};
         SDL_Rect dst = {x, y, sc.width, sc.height};
         SDL_RenderCopy(renderer, sprites, &src, &dst);
+
+#ifdef DEBUG
+        SDL_SetRenderDrawColor(renderer, 255, 0, 255, 255);
+        SDL_RenderDrawRect(renderer, &dst);
+#endif
       }
 
     // draw hero
@@ -36,9 +43,11 @@ void render(SDL_Renderer *renderer, SDL_Texture *sprites)
     SDL_Rect dst = {x - 1, y - sc.height, sc.width, sc.height};
     SDL_RendererFlip flip = (player.state & RIGHT) ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
     SDL_RenderCopyEx(renderer, sprites, &src, &dst, 0, 0, flip);
-    // debug
+
+#ifdef DEBUG
     SDL_SetRenderDrawColor(renderer, 255, 0, 255, 255);
     SDL_RenderDrawRect(renderer, &dst);
+#endif
 
     drawText(renderer, sprites, "THE BANK", 12, 19);
 

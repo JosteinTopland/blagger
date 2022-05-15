@@ -8,6 +8,9 @@ const int levelWidth = 31;
 const int levelHeight = 19;
 const int grid = 16;
 
+Mix_Music *music;
+Mix_Chunk *sounds[2];
+
 const SpriteCoord sprite_coords[] = {
     // x, y, w, h, frames, msec per frames
     { 0, 142, 16, 16, 1, 1 }, // 0x01 brick

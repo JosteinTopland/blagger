@@ -12,7 +12,6 @@ enum {
 };
 
 typedef enum {
-    STOP = 0,
     WALK = 1,
     RIGHT = 2,
     LEFT = 4,

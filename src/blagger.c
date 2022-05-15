@@ -1,5 +1,4 @@
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_mixer.h>
 #include "types.h"
 #include "render.h"
 #include "input.h"
@@ -7,13 +6,9 @@
 #include "globals.h"
 #include "level.h"
 
-#define NO_STDIO_REDIRECT
-
 static SDL_Window *window;
 static SDL_Renderer *renderer;
 static SDL_Texture *sprites;
-static Mix_Chunk *sounds[2];
-static Mix_Music *music;
 
 void init()
 {
@@ -32,17 +27,15 @@ void init()
     sprites = SDL_CreateTextureFromSurface(renderer, surface);
     SDL_FreeSurface(surface);
 
-    // load sounds
+    // load audio
+    music = Mix_LoadMUS("assets/CROWN.MOD");
     sounds[SND_WALK] = Mix_LoadWAV("assets/walk.wav");
     sounds[SND_JUMP] = Mix_LoadWAV("assets/jump.wav");
-
-    music = Mix_LoadMUS("assets/CROWN.MOD");
-    Mix_VolumeMusic(15);
-    Mix_PlayMusic(music, -1);
 }
 
 void quit()
 {
+    Mix_FreeMusic(music);
     Mix_FreeChunk(sounds[0]);
     Mix_FreeChunk(sounds[1]);
     Mix_CloseAudio();
@@ -52,16 +45,17 @@ void quit()
     SDL_Quit();
 }
 
-int main(int argc, char *argv[]) {
+void blagger() {
     init();
-    retroLoader(renderer, sprites);
+    // retroLoader(renderer, sprites);
     setLevel(0);
 
     int run = 1;
     while (run) {
+        // SDL_Log("hei\n");
         int ticks = SDL_GetTicks();
 
-        input(sounds, &run);
+        input(&run);
         update();
         render(renderer, sprites);
 
@@ -72,5 +66,8 @@ int main(int argc, char *argv[]) {
     }
 
     quit();
-    return 0;
+}
+
+int main(int argc, char *argv[]) {
+    blagger();
 }
