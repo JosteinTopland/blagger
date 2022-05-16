@@ -18,7 +18,7 @@ void input(int *run)
                         player.state &= ~LEFT;
                         player.state |= RIGHT | WALK;
                         break;
-                    case SDLK_SPACE:
+                    case SDLK_LCTRL:
                         player.state |= JUMP;
                         break;
                     case SDLK_q:

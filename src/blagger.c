@@ -52,7 +52,6 @@ void blagger() {
 
     int run = 1;
     while (run) {
-        // SDL_Log("hei\n");
         int ticks = SDL_GetTicks();
 
         input(&run);
@@ -70,4 +69,5 @@ void blagger() {
 
 int main(int argc, char *argv[]) {
     blagger();
+    return 0;
 }

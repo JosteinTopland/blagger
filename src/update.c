@@ -6,8 +6,17 @@
 void update()
 {
     int speed = 2;
+    int jump_height = 18;
+
+    SDL_Rect rect = {
+        player.x + (player.state & LEFT ? 0 : 12),
+        player.y,
+        10,
+        10
+    };
+    SDL_bool on_ground = tile_collision(&rect, 0, 0);
     
-    if (player.state & WALK) {
+    if (on_ground && player.state & WALK) {
         if (!(player.state & JUMP) && !Mix_Playing(0)) {
             Mix_PlayChannel(0, sounds[SND_WALK], -1);
         }
@@ -18,28 +27,18 @@ void update()
         if (player.jump == 0) {
             Mix_PlayChannel(0, sounds[SND_JUMP], 0);
         }
-        player.y += player.jump < 16 ? -speed : speed;
+        player.y += player.jump <= jump_height ? -speed : speed;
         player.jump++;
-        if (player.jump >= 32) {
+        if (player.jump >= jump_height) {
             player.jump = 0;
             player.state ^= JUMP;
         }
-    } else {
-        SDL_Rect rect = {
-            player.x + (player.state & LEFT ? 0 : 12),
-            player.y,
-            10,
-            10
-        };
-        if (!tile_collision(&rect, 0, 0)) {
-           player.y += speed;
-        }
+    } else if (!on_ground) {
+        player.y += speed;
     }
 
-    if (!(player.state & WALK) && !(player.state & JUMP)) {
-        if (Mix_Playing(0)) {
-            Mix_HaltChannel(0);
-        }
+    if (!(player.state & WALK) && player.jump == 0) {
+        Mix_HaltChannel(0);
     }
 
     SDL_Log("player.state=%d%d%d%d",

@@ -4,7 +4,7 @@
 #include "render.h"
 #include "globals.h"
 
-#define DEBUG
+//#define DEBUG
 
 void render(SDL_Renderer *renderer, SDL_Texture *sprites)
 {
