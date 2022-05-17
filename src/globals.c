@@ -8,6 +8,7 @@ const int levelWidth = 31;
 const int levelHeight = 19;
 const int grid = 16;
 
+int main_loop = 1;
 Mix_Music *music;
 Mix_Chunk *sounds[2];
 

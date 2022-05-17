@@ -21,7 +21,8 @@ typedef enum {
 struct Sprite {
     int x;
     int y;
-    int jump;
+    int x_velocity;
+    int y_velocity;
     PlayerState state;
 } player;
 

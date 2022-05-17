@@ -31,6 +31,7 @@ void init()
     music = Mix_LoadMUS("assets/CROWN.MOD");
     sounds[SND_WALK] = Mix_LoadWAV("assets/walk.wav");
     sounds[SND_JUMP] = Mix_LoadWAV("assets/jump.wav");
+    Mix_Volume(-1, 128);
 }
 
 void quit()
@@ -50,11 +51,10 @@ void blagger() {
     // retroLoader(renderer, sprites);
     setLevel(0);
 
-    int run = 1;
-    while (run) {
+    while (main_loop) {
         int ticks = SDL_GetTicks();
 
-        input(&run);
+        input();
         update();
         render(renderer, sprites);
 

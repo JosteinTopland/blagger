@@ -5,47 +5,42 @@
 
 void update()
 {
-    int speed = 2;
-    int jump_height = 18;
+    int gravity = 1;
 
-    SDL_Rect rect = {
-        player.x + (player.state & LEFT ? 0 : 12),
-        player.y,
-        10,
-        10
-    };
+    SDL_Rect rect = { player.x + (player.state & LEFT ? 0 : 12), player.y, 10, 10 };
     SDL_bool on_ground = tile_collision(&rect, 0, 0);
-    
-    if (on_ground && player.state & WALK) {
-        if (!(player.state & JUMP) && !Mix_Playing(0)) {
-            Mix_PlayChannel(0, sounds[SND_WALK], -1);
-        }
-        player.x += player.state & LEFT ? -speed : player.state & RIGHT ? speed : 0;
+
+    if (on_ground) {
+        if (!(player.state & WALK)) player.x_velocity = 0;
+        player.y_velocity = 0;
+    } else {
+        player.y_velocity = MAX(player.y_velocity - gravity, -gravity);
+        player.state &= ~WALK;
     }
 
-    if (player.state & JUMP) {
-        if (player.jump == 0) {
-            Mix_PlayChannel(0, sounds[SND_JUMP], 0);
-        }
-        player.y += player.jump <= jump_height ? -speed : speed;
-        player.jump++;
-        if (player.jump >= jump_height) {
-            player.jump = 0;
-            player.state ^= JUMP;
-        }
-    } else if (!on_ground) {
-        player.y += speed;
-    }
-
-    if (!(player.state & WALK) && player.jump == 0) {
+    if (player.state & WALK) {
+        if (player.state & LEFT) player.x_velocity = -1;
+        if (player.state & RIGHT) player.x_velocity = 1;
+        if (!Mix_Playing(0)) Mix_PlayChannel(0, sounds[SND_WALK], -1);
+    } else {
         Mix_HaltChannel(0);
     }
 
-    SDL_Log("player.state=%d%d%d%d",
-    (player.state & JUMP) > 0,
-    (player.state & LEFT) > 0,
-    (player.state & RIGHT) > 0,
-    (player.state & WALK) > 0);
+    if (player.state & JUMP && on_ground) {
+        player.y_velocity = 6;
+        player.state &= ~JUMP;
+        Mix_PlayChannel(1, sounds[SND_JUMP], 0);
+    }
+
+    player.x += windowScale * player.x_velocity;
+    player.y -= windowScale * player.y_velocity;
+
+    SDL_Log("player.state=%d%d%d%d\t%d",
+        (player.state & JUMP) > 0,
+        (player.state & LEFT) > 0,
+        (player.state & RIGHT) > 0,
+        (player.state & WALK) > 0,
+        player.y_velocity);
 }
 
 SDL_bool tile_collision(const SDL_Rect *rect, int x, int y) {

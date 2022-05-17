@@ -3,7 +3,7 @@
 #include "types.h"
 #include "globals.h"
 
-void input(int *run)
+void input()
 {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
@@ -22,7 +22,7 @@ void input(int *run)
                         player.state |= JUMP;
                         break;
                     case SDLK_q:
-                        *run = 0;
+                        main_loop = 0;
                         break;
                 }
                 break;

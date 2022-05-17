@@ -5,8 +5,9 @@ void setLevel(int level)
 {
     player.x = 24 * grid;
     player.y = 3 * grid;
+    player.x_velocity = 0;
+    player.y_velocity = 0;
     player.state = LEFT;
-    player.jump = 0;
 
     // Mix_PlayMusic(music, -1);
 }
