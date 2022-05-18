@@ -4,8 +4,7 @@
 #include <SDL2/SDL.h>
 #include "types.h"
 
-void render(SDL_Renderer *renderer, SDL_Texture *sprites);
-void drawText(SDL_Renderer *renderer, SDL_Texture *sprites, const char * text, int x, int y);
-void retroLoader(SDL_Renderer *renderer, SDL_Texture *sprites);
+void render();
+void retro_loader();
 
 #endif

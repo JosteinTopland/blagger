@@ -3,7 +3,9 @@
 
 enum {
     SND_WALK = 0,
-    SND_JUMP = 1
+    SND_JUMP = 1,
+    SND_FALL = 2,
+    SND_GROUND = 3
 };
 
 enum {

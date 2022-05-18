@@ -4,68 +4,59 @@
 #include "render.h"
 #include "globals.h"
 
-//#define DEBUG
-
-void render(SDL_Renderer *renderer, SDL_Texture *sprites)
-{
+static void draw_level() {
     int ticks = SDL_GetTicks();
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-    SDL_RenderClear(renderer);
 
-    // draw level
     int w = 31;
     int h = 19;
     for (int i = 0; i < w * h; i++) {
         if (!level[i]) continue;
-        int x = (i % w) * grid;
-        int y = (i / w) * grid;
+        int x = (i % w) * level_grid;
+        int y = (i / w) * level_grid;
         int spriteIdx = level[i] - 1;
         SpriteCoord sc = sprite_coords[spriteIdx];
-        if (sc.animate) {
-            sc.x += sc.width * ((ticks / sc.fps) % sc.frames);
-        }
+        if (sc.animate) sc.x += sc.width * ((ticks / sc.fps) % sc.frames);
         SDL_Rect src = {sc.x, sc.y, sc.width, sc.height};
         SDL_Rect dst = {x, y, sc.width, sc.height};
         SDL_RenderCopy(renderer, sprites, &src, &dst);
+    }
+}
 
-#ifdef DEBUG
-        SDL_SetRenderDrawColor(renderer, 255, 0, 255, 255);
-        SDL_RenderDrawRect(renderer, &dst);
-#endif
-      }
-
-    // draw hero
+static void draw_blagger() {
     int x = player.x;
     int y = player.y;
     SpriteCoord sc = sprite_coords[HERO - 1];
-    sc.x += sc.width * (player.state & RIGHT ? x/2 % sc.frames : sc.frames - 1 - (x/2) % sc.frames);
+    if (player.state & WALK) sc.x += sc.width * (player.state & LEFT ? sc.frames - 1 - x % sc.frames : x % sc.frames);
     SDL_Rect src = {sc.x, sc.y, sc.width, sc.height};
     SDL_Rect dst = {x - 1, y - sc.height, sc.width, sc.height};
-    SDL_RendererFlip flip = (player.state & RIGHT) ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
+    SDL_RendererFlip flip = player.state & LEFT ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
     SDL_RenderCopyEx(renderer, sprites, &src, &dst, 0, 0, flip);
-
-#ifdef DEBUG
-    SDL_SetRenderDrawColor(renderer, 255, 0, 255, 255);
-    SDL_RenderDrawRect(renderer, &dst);
-#endif
-
-    drawText(renderer, sprites, "THE BANK", 12, 19);
-
-    SDL_RenderPresent(renderer);
 }
 
-void drawText(SDL_Renderer *renderer, SDL_Texture *sprites, const char * text, int x, int y) {
+static void draw_text(const char * text, int x, int y) {
     for (unsigned i = 0; i < strlen(text); i++) {
         if (text[i] == ' ') continue;
-        int xx = (x + i) * grid;
-        int yy = y * grid;
-        SDL_Rect src = {(text[i] - 65) * 16 + 16, 126, 16, 16};
+        int xx = (x + i) * level_grid;
+        int yy = y * level_grid;
+        SDL_Rect src = {(text[i] - 65) * 8 + 8, 63, 8, 8};
         SDL_Rect dst = {xx, yy, src.w, src.h};
         SDL_RenderCopy(renderer, sprites, &src, &dst);
     }
 }
 
-void retroLoader(SDL_Renderer *renderer, SDL_Texture *sprites)
+void render()
+{
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderClear(renderer);
+
+    draw_level();
+    draw_blagger();
+    draw_text("THE BANK", 12, 19);
+
+    SDL_RenderPresent(renderer);
+}
+
+void retro_loader()
 {
     const int numColors = 16;
     Uint32 colors[] = {
@@ -88,20 +79,20 @@ void retroLoader(SDL_Renderer *renderer, SDL_Texture *sprites)
     };
 
     int colorIdx = SDL_GetTicks() % numColors;
-    SDL_Texture *texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_BGRA32, SDL_TEXTUREACCESS_STREAMING, windowWidth, windowHeight);
-    Uint32 *pixels = malloc(windowWidth * windowHeight * sizeof(Uint32));
+    SDL_Texture *texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_BGRA32, SDL_TEXTUREACCESS_STREAMING, window_width, window_height);
+    Uint32 *pixels = malloc(window_width * window_height * sizeof(Uint32));
     for (int frames = 0; frames < 100; frames++) {
         if (frames < 80) {
             int length = 0;
-            for (int i = 0; i < windowWidth * windowHeight; i++) {
+            for (int i = 0; i < window_width * window_height; i++) {
                 if (length == 0) {
                     colorIdx = (colorIdx + 1) % numColors;
-                    length = 5000 + rand() % (frames < 50 ? 10000 : 50000);
+                    length = rand() % (frames < 50 ? 1000 : 30000) + 1000;
                 }
                 length--;
                 pixels[i] = colors[colorIdx];
             }
-            SDL_UpdateTexture(texture, NULL, pixels, windowWidth * sizeof(Uint32));
+            SDL_UpdateTexture(texture, NULL, pixels, window_width * sizeof(Uint32));
             SDL_RenderCopy(renderer, texture, NULL, NULL);
         } else {
             Uint32 color = colors[colorIdx];
@@ -112,10 +103,10 @@ void retroLoader(SDL_Renderer *renderer, SDL_Texture *sprites)
             SDL_RenderClear(renderer);
         }
 
-        SDL_Rect rect = {50, 60, windowWidth - 100, windowHeight - 120};
+        SDL_Rect rect = {25, 30, window_width - 50, window_height - 60};
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         SDL_RenderFillRect(renderer, &rect);
-        drawText(renderer, sprites, "LOADING", 3, 4);
+        draw_text("LOADING", 3, 5);
 
         // OSX fix
         SDL_Event event;

@@ -1,37 +1,41 @@
 #include "globals.h"
 
-const int windowWidth = 640;
-const int windowHeight = 400;
-const int windowScale = 2;
+SDL_Window *window;
+SDL_Renderer *renderer;
+SDL_Texture *sprites;
 
-const int levelWidth = 31;
-const int levelHeight = 19;
-const int grid = 16;
+const int window_width = 320;
+const int window_height = 200;
+const int window_scale = 4;
+
+const int level_width = 31;
+const int level_height = 19;
+const int level_grid = 8;
 
 int main_loop = 1;
 Mix_Music *music;
-Mix_Chunk *sounds[2];
+Mix_Chunk *sounds[4];
 
 const SpriteCoord sprite_coords[] = {
     // x, y, w, h, frames, msec per frames
-    { 0, 142, 16, 16, 1, 1 }, // 0x01 brick
-    { 48, 142, 16, 16, 1, 1 }, // 0x02 key
-    { 96, 142, 16, 16, 1, 1 }, // 0x03 flower    
-    { 0, 192, 16, 16, 8, 30, 1 }, // 0x04 indigo moving floor
-    { 80, 174, 80, 16, 1, 1 }, // 0x05 BANK
-    { 112, 142, 16, 16, 1, 1 }, // 0x06 cross
-    { 208, 174, 16, 16, 1, 1 }, // 0x07 iron floor
-    { 256, 174, 16, 16, 1, 1 }, // 0x08 blue falling floor
-    { 0, 208, 16, 16, 8, 30, 1 }, // 0x09 green moving floor
-    { 176, 174, 16, 16, 1, 1 }, // 0x0a blue wall top
-    { 192, 174, 16, 16, 1, 1 }, // 0x0b blue wall center
-    { 160, 174, 16, 16, 1, 1 }, // 0x0c blue wall bottom
-    { 480, 158, 16, 32, 1, 1 }, // 0x0d window
-    { 464, 158, 16, 16, 1, 1 }, // 0x0e roof top
-    { 448, 158, 16, 16, 1, 1 }, // 0x0f roof bottom
-    { 480, 94, 48, 32, 1, 1 }, // 0x10 safe,
-    { 192, 42, 48, 32, 2, 300, 1 }, // 0x11 enemy
-    { 0, 0, 28, 32, 8, 300 } // 0x12 hero
+    { 0, 71, 8, 8, 1, 1 }, // 0x01 brick
+    { 24, 71, 8, 8, 1, 1 }, // 0x02 key
+    { 48, 71, 8, 8, 1, 1 }, // 0x03 flower    
+    { 0, 96, 8, 8, 8, 30, 1 }, // 0x04 indigo moving floor
+    { 40, 87, 40, 8, 1, 1 }, // 0x05 BANK
+    { 56, 71, 8, 8, 1, 1 }, // 0x06 cross
+    { 104, 87, 8, 8, 1, 1 }, // 0x07 iron floor
+    { 128, 87, 8, 8, 1, 1 }, // 0x08 blue falling floor
+    { 0, 104, 8, 8, 8, 30, 1 }, // 0x09 green moving floor
+    { 88, 87, 8, 8, 1, 1 }, // 0x0a blue wall top
+    { 96, 87, 8, 8, 1, 1 }, // 0x0b blue wall center
+    { 80, 87, 8, 8, 1, 1 }, // 0x0c blue wall bottom
+    { 240, 79, 8, 16, 1, 1 }, // 0x0d window
+    { 232, 79, 8, 8, 1, 1 }, // 0x0e roof top
+    { 224, 79, 8, 8, 1, 1 }, // 0x0f roof bottom
+    { 240, 47, 24, 16, 1, 1 }, // 0x10 safe,
+    { 96, 21, 24, 16, 2, 300, 1 }, // 0x11 enemy
+    { 0, 0, 14, 16, 8, 300 } // 0x12 hero
 };
 
 const char level[] = {

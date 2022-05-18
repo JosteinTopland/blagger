@@ -1,22 +1,18 @@
-#include <SDL2/SDL.h>
-#include "types.h"
 #include "render.h"
 #include "input.h"
 #include "update.h"
 #include "globals.h"
 #include "level.h"
 
-static SDL_Window *window;
-static SDL_Renderer *renderer;
-static SDL_Texture *sprites;
+#include <SDL2/SDL.h>
 
 void init()
 {
-    int width = windowWidth * windowScale;
-    int height = windowHeight * windowScale;
+    int width = window_width * window_scale;
+    int height = window_height * window_scale;
     SDL_Init(SDL_INIT_EVERYTHING);
     SDL_CreateWindowAndRenderer(width, height, SDL_WINDOW_OPENGL, &window, &renderer);
-    SDL_RenderSetScale(renderer, (float)windowScale, (float)windowScale);
+    SDL_RenderSetScale(renderer, (float)window_scale, (float)window_scale);
 
     Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 1, 1024);
     Mix_Volume(-1, 50);
@@ -31,6 +27,8 @@ void init()
     music = Mix_LoadMUS("assets/CROWN.MOD");
     sounds[SND_WALK] = Mix_LoadWAV("assets/walk.wav");
     sounds[SND_JUMP] = Mix_LoadWAV("assets/jump.wav");
+    sounds[SND_FALL] = Mix_LoadWAV("assets/fall.wav");
+    sounds[SND_GROUND] = Mix_LoadWAV("assets/ground.wav");
     Mix_Volume(-1, 128);
 }
 
@@ -39,6 +37,8 @@ void quit()
     Mix_FreeMusic(music);
     Mix_FreeChunk(sounds[0]);
     Mix_FreeChunk(sounds[1]);
+    Mix_FreeChunk(sounds[2]);
+    Mix_FreeChunk(sounds[3]);
     Mix_CloseAudio();
     SDL_DestroyTexture(sprites);
     SDL_DestroyRenderer(renderer);
@@ -48,15 +48,15 @@ void quit()
 
 void blagger() {
     init();
-    // retroLoader(renderer, sprites);
-    setLevel(0);
+    // retro_loader();
+    set_level(0);
 
     while (main_loop) {
         int ticks = SDL_GetTicks();
 
         input();
         update();
-        render(renderer, sprites);
+        render();
 
         // wait
         int fps = 30;

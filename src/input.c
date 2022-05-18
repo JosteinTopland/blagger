@@ -18,7 +18,7 @@ void input()
                         player.state &= ~LEFT;
                         player.state |= RIGHT | WALK;
                         break;
-                    case SDLK_LCTRL:
+                    case SDLK_UP:
                         player.state |= JUMP;
                         break;
                     case SDLK_q:
@@ -29,16 +29,10 @@ void input()
             case SDL_KEYUP:
                 switch (event.key.keysym.sym) {
                     case SDLK_LEFT:
-                        if (player.state & LEFT) {
-                            player.state ^= WALK;
-                        }
-                        break;
                     case SDLK_RIGHT:
-                        if (player.state & RIGHT) {
-                            player.state ^= WALK;
+                        if (player.state & LEFT || player.state & RIGHT) {
+                            player.state &= ~WALK;
                         }
-                        break;
-                    case SDLK_SPACE:
                         break;
                 }
                 break;
