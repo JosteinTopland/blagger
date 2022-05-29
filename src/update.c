@@ -7,7 +7,7 @@ static int ground_collision() {
     if (player.y % 8 > 0) return 0;
     int p1 = (player.x + 5) / level_grid + player.y / level_grid * level_width;
     int p2 = (player.x + 6) / level_grid + player.y / level_grid * level_width;
-    return level[p1] || level[p2] ? level[p1] : 0;
+    return (level[p1] && level[p1] != 0x12) || (level[p2] && level[p2] != 0x12) ? level[p1] : 0;
 
     // int p1 = (rect->x + 0 + x) / level_grid + (rect->y + y) / level_grid * level_width;
     // int p2 = (rect->x + 12 + x) / level_grid + (rect->y + y) / level_grid * level_width;
@@ -28,16 +28,17 @@ static int ground_collision() {
 
 void update()
 {
-    int gravity = 1;
     int ground = ground_collision();
 
     if (ground) {
         if (player.y_velocity != 0) Mix_PlayChannel(1, sounds[SND_GROUND], 0);
         player.y_velocity = 0;
     } else {
-        player.y_velocity = MAX(player.y_velocity - gravity, -gravity);
-        // player.state &= ~WALK;
-        if (!Mix_Playing(1)) Mix_PlayChannel(1, sounds[SND_FALL], 0);
+        if (!Mix_Playing(1)) {
+            Mix_PlayChannel(1, sounds[SND_FALL], 0);
+            //player.state &= ~WALK;
+        }
+        player.y_velocity = MAX(player.y_velocity - 1, -1);
     }
 
     if (player.state & WALK) {
@@ -46,18 +47,22 @@ void update()
         if (!Mix_Playing(0)) Mix_PlayChannel(0, sounds[SND_WALK], -1);
         if (!ground) Mix_HaltChannel(0);
     } else {
-        player.x_velocity = ground == 4 ? -1 : ground == 9 ? 1 : 0;
         Mix_HaltChannel(0);
+        player.x_velocity = 0;
     }
 
     if (player.state & JUMP && ground) {
-        player.y_velocity = 6;
+        player.y_velocity = 18;
         player.state &= ~JUMP;
         Mix_PlayChannel(1, sounds[SND_JUMP], 0);
     }
 
+    if (ground == 4) player.x_velocity--;
+    if (ground == 9) player.x_velocity++;
+
     player.x += player.x_velocity;
-    player.y -= player.y_velocity;
+    player.y -= MIN(player.y_velocity, 1);
+
 
     return;
     SDL_Log("player.state=%d%d%d%d\t%d",

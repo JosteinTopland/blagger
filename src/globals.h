@@ -17,15 +17,15 @@ extern const int window_width;
 extern const int window_height;
 extern const int window_scale;
 
-extern const int level_width;
-extern const int level_height;
-extern const int level_grid;
-
 extern int main_loop;
 extern Mix_Music *music;
 extern Mix_Chunk *sounds[4];
 
 extern const SpriteCoord sprite_coords[];
-extern const char level[];
+
+extern const int level_width;
+extern const int level_height;
+extern const int level_grid;
+extern const char level[31 * 19];
 
 #endif

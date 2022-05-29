@@ -35,7 +35,8 @@ typedef struct {
     int height;
     int frames;
     int fps;
-    char animate;
+    int x1;
+    int x2;
 } SpriteCoord;
 
 #endif

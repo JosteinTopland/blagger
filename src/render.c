@@ -5,17 +5,13 @@
 #include "globals.h"
 
 static void draw_level() {
-    int ticks = SDL_GetTicks();
-
-    int w = 31;
-    int h = 19;
-    for (int i = 0; i < w * h; i++) {
-        if (!level[i]) continue;
-        int x = (i % w) * level_grid;
-        int y = (i / w) * level_grid;
+    for (int i = 0; i < level_width * level_height; i++) {
+        if (!level[i] || level[i] == 0x12) continue;
+        int x = (i % level_width) * level_grid;
+        int y = (i / level_width) * level_grid;
         int spriteIdx = level[i] - 1;
         SpriteCoord sc = sprite_coords[spriteIdx];
-        if (sc.animate) sc.x += sc.width * ((ticks / sc.fps) % sc.frames);
+        if (sc.frames > 1) sc.x += sc.width * ((SDL_GetTicks() / sc.fps) % sc.frames);
         SDL_Rect src = {sc.x, sc.y, sc.width, sc.height};
         SDL_Rect dst = {x, y, sc.width, sc.height};
         SDL_RenderCopy(renderer, sprites, &src, &dst);
@@ -26,7 +22,7 @@ static void draw_blagger() {
     int x = player.x;
     int y = player.y;
     SpriteCoord sc = sprite_coords[HERO - 1];
-    if (player.state & WALK) sc.x += sc.width * (player.state & LEFT ? sc.frames - 1 - x % sc.frames : x % sc.frames);
+    if (player.state & WALK) sc.x += sc.width * (SDL_GetTicks() / sc.fps % sc.frames);
     SDL_Rect src = {sc.x, sc.y, sc.width, sc.height};
     SDL_Rect dst = {x - 1, y - sc.height, sc.width, sc.height};
     SDL_RendererFlip flip = player.state & LEFT ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
