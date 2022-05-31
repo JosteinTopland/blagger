@@ -2,31 +2,33 @@
 #define TYPES_H
 
 enum {
-    SND_WALK = 0,
+    SND_MOVE = 0,
     SND_JUMP = 1,
     SND_FALL = 2,
     SND_GROUND = 3
 };
 
-enum {
+typedef enum {
     BRICK = 0x01,
+    CAR = 0x11,
     HERO = 0x12
-};
+} Type;
 
 typedef enum {
-    WALK = 1,
+    MOVE = 1,
     RIGHT = 2,
     LEFT = 4,
     JUMP = 8
 } PlayerState;
 
-struct Sprite {
+typedef struct {
+    Type type;
     int x;
     int y;
+    PlayerState state;
     int x_velocity;
     int y_velocity;
-    PlayerState state;
-} player;
+} Sprite;
 
 typedef struct {
     int x;
@@ -35,8 +37,6 @@ typedef struct {
     int height;
     int frames;
     int fps;
-    int x1;
-    int x2;
 } SpriteCoord;
 
 #endif

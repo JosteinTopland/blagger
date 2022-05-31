@@ -25,7 +25,7 @@ void init()
 
     // load audio
     music = Mix_LoadMUS("assets/CROWN.MOD");
-    sounds[SND_WALK] = Mix_LoadWAV("assets/walk.wav");
+    sounds[SND_MOVE] = Mix_LoadWAV("assets/walk.wav");
     sounds[SND_JUMP] = Mix_LoadWAV("assets/jump.wav");
     sounds[SND_FALL] = Mix_LoadWAV("assets/fall.wav");
     sounds[SND_GROUND] = Mix_LoadWAV("assets/ground.wav");

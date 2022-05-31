@@ -23,9 +23,13 @@ extern Mix_Chunk *sounds[4];
 
 extern const SpriteCoord sprite_coords[];
 
+extern Sprite *player;
+extern Sprite level_sprites[];
+extern const int num_sprites;
+
 extern const int level_width;
 extern const int level_height;
 extern const int level_grid;
-extern const char level[31 * 19];
+extern const char level_map[];
 
 #endif

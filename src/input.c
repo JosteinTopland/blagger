@@ -11,15 +11,15 @@ void input()
             case SDL_KEYDOWN:
                 switch (event.key.keysym.sym) {
                     case SDLK_LEFT:
-                        player.state &= ~RIGHT;
-                        player.state |= LEFT | WALK;
+                        player->state &= ~RIGHT;
+                        player->state |= LEFT | MOVE;
                         break;
                     case SDLK_RIGHT:
-                        player.state &= ~LEFT;
-                        player.state |= RIGHT | WALK;
+                        player->state &= ~LEFT;
+                        player->state |= RIGHT | MOVE;
                         break;
                     case SDLK_UP:
-                        player.state |= JUMP;
+                        player->state |= JUMP;
                         break;
                     case SDLK_q:
                         main_loop = 0;
@@ -30,8 +30,8 @@ void input()
                 switch (event.key.keysym.sym) {
                     case SDLK_LEFT:
                     case SDLK_RIGHT:
-                        if (player.state & LEFT || player.state & RIGHT) {
-                            player.state &= ~WALK;
+                        if (player->state & LEFT || player->state & RIGHT) {
+                            player->state &= ~MOVE;
                         }
                         break;
                 }

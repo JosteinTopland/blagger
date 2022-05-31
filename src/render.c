@@ -4,29 +4,32 @@
 #include "render.h"
 #include "globals.h"
 
-static void draw_level() {
+static void draw_map() {
     for (int i = 0; i < level_width * level_height; i++) {
-        if (!level[i] || level[i] == 0x12) continue;
+        if (!level_map[i] || level_map[i] == 0x12) continue;
         int x = (i % level_width) * level_grid;
         int y = (i / level_width) * level_grid;
-        int spriteIdx = level[i] - 1;
+        int spriteIdx = level_map[i] - 1;
         SpriteCoord sc = sprite_coords[spriteIdx];
-        if (sc.frames > 1) sc.x += sc.width * ((SDL_GetTicks() / sc.fps) % sc.frames);
+        if (sc.frames > 1) sc.x += sc.width * (SDL_GetTicks() / sc.fps % sc.frames);
         SDL_Rect src = {sc.x, sc.y, sc.width, sc.height};
         SDL_Rect dst = {x, y, sc.width, sc.height};
         SDL_RenderCopy(renderer, sprites, &src, &dst);
     }
 }
 
-static void draw_blagger() {
-    int x = player.x;
-    int y = player.y;
-    SpriteCoord sc = sprite_coords[HERO - 1];
-    if (player.state & WALK) sc.x += sc.width * (SDL_GetTicks() / sc.fps % sc.frames);
-    SDL_Rect src = {sc.x, sc.y, sc.width, sc.height};
-    SDL_Rect dst = {x - 1, y - sc.height, sc.width, sc.height};
-    SDL_RendererFlip flip = player.state & LEFT ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
-    SDL_RenderCopyEx(renderer, sprites, &src, &dst, 0, 0, flip);
+static void draw_sprites() {
+    for (int i = 0; i < num_sprites; i++) {
+        Sprite *sprite = &level_sprites[i];
+        int x = sprite->x;
+        int y = sprite->y;
+        SpriteCoord sc = sprite_coords[sprite->type - 1];
+        if (sprite->state & MOVE && sc.frames > 1) sc.x += sc.width * (SDL_GetTicks() / sc.fps % sc.frames);
+        SDL_Rect src = {sc.x, sc.y, sc.width, sc.height};
+        SDL_Rect dst = {x - 1, y - sc.height, sc.width, sc.height};
+        SDL_RendererFlip flip = sprite->state & LEFT ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
+        SDL_RenderCopyEx(renderer, sprites, &src, &dst, 0, 0, flip);
+    }
 }
 
 static void draw_text(const char * text, int x, int y) {
@@ -45,8 +48,8 @@ void render()
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
 
-    draw_level();
-    draw_blagger();
+    draw_map();
+    draw_sprites();
     draw_text("THE BANK", 12, 19);
 
     SDL_RenderPresent(renderer);
