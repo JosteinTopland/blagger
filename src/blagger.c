@@ -48,7 +48,7 @@ void quit()
 
 void blagger() {
     init();
-    // retro_loader();
+    retro_loader();
     set_level(0);
 
     while (main_loop) {

@@ -105,7 +105,7 @@ void retro_loader()
         SDL_Rect rect = {25, 30, window_width - 50, window_height - 60};
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         SDL_RenderFillRect(renderer, &rect);
-        draw_text("LOADING", 3, 5);
+        draw_text("LOADING", 3, 4);
 
         // OSX fix
         SDL_Event event;
