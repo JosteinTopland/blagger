@@ -9,7 +9,7 @@ LDFLAGS = $(shell sdl2-config --libs) -lSDL2_image -lSDL2_mixer
 
 #link
 $(OUT): $(OBJS)
-	$(CC) $(LDFLAGS) -o $@ $^
+	$(CC) -o $@ $^ $(LDFLAGS)
 
 #compile
 %.o: $(SRCDIR)%.c
