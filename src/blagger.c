@@ -4,7 +4,8 @@
 #include "globals.h"
 #include "level.h"
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
+#include <SDL_mixer.h>
 
 void init()
 {
@@ -18,17 +19,17 @@ void init()
     Mix_Volume(-1, 50);
 
     // load graphics
-    SDL_Surface *surface = SDL_LoadBMP("assets/sprites.bmp");
+    SDL_Surface *surface = SDL_LoadBMP("data/sprites.bmp");
     SDL_SetColorKey(surface, SDL_TRUE, SDL_MapRGB(surface->format, 255, 0, 255));
     sprites = SDL_CreateTextureFromSurface(renderer, surface);
     SDL_FreeSurface(surface);
 
     // load audio
-    music = Mix_LoadMUS("assets/CROWN.MOD");
-    sounds[SND_MOVE] = Mix_LoadWAV("assets/walk.wav");
-    sounds[SND_JUMP] = Mix_LoadWAV("assets/jump.wav");
-    sounds[SND_FALL] = Mix_LoadWAV("assets/fall.wav");
-    sounds[SND_GROUND] = Mix_LoadWAV("assets/ground.wav");
+    music = Mix_LoadMUS("data/CROWN.MOD");
+    sounds[SND_MOVE] = Mix_LoadWAV("data/walk.wav");
+    sounds[SND_JUMP] = Mix_LoadWAV("data/jump.wav");
+    sounds[SND_FALL] = Mix_LoadWAV("data/fall.wav");
+    sounds[SND_GROUND] = Mix_LoadWAV("data/ground.wav");
     Mix_Volume(-1, 128);
 }
 

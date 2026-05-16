@@ -3,11 +3,12 @@
 
 #include "types.h"
 
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_mixer.h>
+#include <SDL.h>
+#include <SDL_mixer.h>
 
 #define MIN(a,b) (((a)<(b))?(a):(b))
 #define MAX(a,b) (((a)>(b))?(a):(b))
+#define level_grid 8
 
 extern SDL_Window *window;
 extern SDL_Renderer *renderer;
@@ -29,7 +30,6 @@ extern const int num_sprites;
 
 extern const int level_width;
 extern const int level_height;
-extern const int level_grid;
 extern const char level_map[];
 
 #endif

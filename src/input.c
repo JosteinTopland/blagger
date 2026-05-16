@@ -1,4 +1,4 @@
-#include <SDL2/SDL.h>
+#include <SDL.h>
 #include "input.h"
 #include "types.h"
 #include "globals.h"

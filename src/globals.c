@@ -34,8 +34,6 @@ const SpriteCoord sprite_coords[] = {
     { 0, 0, 14, 16, 8, 30 } // 0x12 hero
 };
 
-const int level_grid = 8;
-
 const int num_sprites = 2;
 Sprite level_sprites[] = {
     { CAR, 17 * level_grid, 18 * level_grid, MOVE | LEFT, 0, 0 },
